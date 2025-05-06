@@ -37,6 +37,8 @@ find * -name "setup.sh" -not -wholename "packages*" | while read setup; do
     ./$setup
 done
 
-zsh
+. tools/install_neovim.sh
+# . tools/install_tmux.sh
+# zsh
 
 success "Finished installing Dotfiles"

@@ -26,7 +26,7 @@ symlink() {
             substep_error "Failed to remove existing file(s) at $2."
         fi
     fi
-    if ln -s "$1" "$2"; then
+    if ln -sf "$1" "$2"; then
         substep_success "Symlinked $2 to $1. $OVERWRITTEN"
     else
         substep_error "Symlinking $2 to $1 failed."

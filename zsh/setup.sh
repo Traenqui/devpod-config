@@ -18,32 +18,31 @@ symlink "$DOTFILES/zsh/zshrc" "$ZDOTDIR/.zshrc"
 substep_info "Symlinking eza theme..."
 symlink "$DOTFILES/eza/tokyonight.yml" "$XDG_CONFIG_HOME/eza/theme.yml"
 
+clear_broken_symlinks "$ZDOTDIR"
+
 set_zsh_shell() {
     if echo "$SHELL" | grep --quiet zsh; then
-        success "Zsh shell is already set up."
+        success "Zsh shell is already set."
     else
-        substep_info "Adding Zsh executable to /etc/shells"
+        substep_info "Adding Zsh executable to /etc/shells if needed..."
         if grep --fixed-strings --line-regexp --quiet "$(which zsh)" /etc/shells; then
             substep_success "Zsh executable already exists in /etc/shells."
         else
             if which zsh | sudo tee -a /etc/shells > /dev/null; then
                 substep_success "Zsh executable added to /etc/shells."
             else
-                substep_error "Failed adding Zsh executable to /etc/shells."
+                substep_error "Failed to add Zsh executable to /etc/shells."
                 return 1
             fi
         fi
-        substep_info "Changing shell to Zsh"
 
-        if sudo chsh -s "$(which zsh)"; then
-            substep_success "Changed shell to Zsh"
+        substep_info "Changing default shell to Zsh..."
+        if sudo chsh -s "$(which zsh)" "$USER"; then
+            substep_success "Changed default shell to Zsh."
         else
-            substep_error "Failed changing shell to Zsh"
+            substep_error "Failed to change default shell to Zsh."
             return 2
         fi
-
-        substep_info "Running Zsh initial setup"$
-        zsh -c "source $HOME/.zshenv"
     fi
 }
 
@@ -52,3 +51,6 @@ if set_zsh_shell; then
 else
     error "Failed to fully set up Zsh."
 fi
+
+info "Starting Zsh now to verify configuration..."
+exec zsh

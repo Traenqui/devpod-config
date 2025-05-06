@@ -1,0 +1,7 @@
+# Stop ssh-agent if started
+if [[ -n "$SSH_AGENT_PID" ]]; then
+  eval "$(ssh-agent -k)" > /dev/null
+fi
+
+# Clear screen on logout
+clear
