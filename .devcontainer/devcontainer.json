@@ -3,5 +3,6 @@
     "features": {
         "ghcr.io/meaningful-ooo/devcontainer-features/homebrew:2": {}
     },
-    "name": "dotpod"
+   "name": "dotpod",
+   "forwardPorts": [40785]
 }
