@@ -14,6 +14,9 @@ mkdir -p "$XDG_CONFIG_HOME/eza"
 substep_info "Symlinking Zsh config files..."
 symlink "$DOTFILES/zsh/zshenv" "$HOME/.zshenv"
 symlink "$DOTFILES/zsh/zshrc" "$ZDOTDIR/.zshrc"
+symlink "$DOTFILES/zsh/zlogout" "$ZDOTDIR/.zlogout"
+symlink "$DOTFILES/zsh/zlogin" "$ZDOTDIR/.zlogin"
+symlink "$DOTFILES/zsh/zprofile" "$ZDOTDIR/.zprofile"
 
 substep_info "Symlinking eza theme..."
 symlink "$DOTFILES/eza/tokyonight.yml" "$XDG_CONFIG_HOME/eza/theme.yml"
@@ -28,7 +31,7 @@ set_zsh_shell() {
         if grep --fixed-strings --line-regexp --quiet "$(which zsh)" /etc/shells; then
             substep_success "Zsh executable already exists in /etc/shells."
         else
-            if which zsh | sudo tee -a /etc/shells > /dev/null; then
+            if which zsh | sudo tee -a /etc/shells >/dev/null; then
                 substep_success "Zsh executable added to /etc/shells."
             else
                 substep_error "Failed to add Zsh executable to /etc/shells."
@@ -54,3 +57,4 @@ fi
 
 info "Starting Zsh now to verify configuration..."
 exec zsh
+

@@ -9,4 +9,3 @@ fi
 if command -v gpgconf >/dev/null; then
   export GPG_TTY=$(tty)
 fi
-

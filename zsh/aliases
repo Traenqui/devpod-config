@@ -30,6 +30,7 @@ alias conf="$HOME/repos/config"
 alias work="$HOME/repos/work"
 
 # loades the neovim config form this repo instad of the default location
-alias nvim='XDG_CONFIG_HOME="$HOME/repos/config" nvim'
+# alias nvim='XDG_CONFIG_HOME="$HOME/repos/config" nvim'
+alias nvim='XDG_CONFIG_HOME="/workspaces/dotpod/" nvim'
 alias vim='nvim'
 alias vi='nvim'

@@ -5,3 +5,4 @@ fi
 
 # Clear screen on logout
 clear
+echo "From logout"

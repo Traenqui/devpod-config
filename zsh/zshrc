@@ -2,11 +2,6 @@
 
 fpath=($DOTFILES/zsh/plugins $fpath)
 
-# Prompt
-autoload -Uz promptinit
-promptinit
-prompt pure
-
 # Completion
 autoload -Uz compinit
 compinit
