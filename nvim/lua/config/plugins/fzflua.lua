@@ -89,9 +89,8 @@ return {
             end,
             desc = "[/] Live grep the current buffer",
         },
-
-         { "<leader>gc", "<cmd>FzfLua git_commits<CR>", desc = "Commits" },
-      { "<leader>gs", "<cmd>FzfLua git_status<CR>", desc = "Status" },
+        { "<leader>gc", "<cmd>FzfLua git_commits<CR>", desc = "Commits" },
+        { "<leader>gs", "<cmd>FzfLua git_status<CR>", desc = "Status" },
         {
             "<S-h>", "<cmd>FzfLua buffers sort_mru=true sort_lastused=true<cr>", desc = "Buffers"        }
 

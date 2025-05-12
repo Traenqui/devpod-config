@@ -1,3 +1,2 @@
-require('config.core.options')
-require('config.core.events')
-require('config.core.keymaps')
+require("config.core.options")
+require("config.core.keymaps")
