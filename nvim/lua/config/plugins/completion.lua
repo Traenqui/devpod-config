@@ -21,7 +21,7 @@ return {
     config = function()
         local cmp = require("cmp")
         -- local luasnip = require("luasnip")
-        local has_luasnip, luasnip = pcall(require, 'luasnip')
+        local has_luasnip, luasnip = pcall(require, "luasnip")
         local lspkind = require("lspkind")
         local colorizer = require("tailwindcss-colorizer-cmp").formatter
 
@@ -30,31 +30,31 @@ return {
         end
 
         local lsp_kinds = {
-            Class = ' ',
-            Color = ' ',
-            Constant = ' ',
-            Constructor = ' ',
-            Enum = ' ',
-            EnumMember = ' ',
-            Event = ' ',
-            Field = ' ',
-            File = ' ',
-            Folder = ' ',
-            Function = ' ',
-            Interface = ' ',
-            Keyword = ' ',
-            Method = ' ',
-            Module = ' ',
-            Operator = ' ',
-            Property = ' ',
-            Reference = ' ',
-            Snippet = ' ',
-            Struct = ' ',
-            Text = ' ',
-            TypeParameter = ' ',
-            Unit = ' ',
-            Value = ' ',
-            Variable = ' ',
+            Class = " ",
+            Color = " ",
+            Constant = " ",
+            Constructor = " ",
+            Enum = " ",
+            EnumMember = " ",
+            Event = " ",
+            Field = " ",
+            File = " ",
+            Folder = " ",
+            Function = " ",
+            Interface = " ",
+            Keyword = " ",
+            Method = " ",
+            Module = " ",
+            Operator = " ",
+            Property = " ",
+            Reference = " ",
+            Snippet = " ",
+            Struct = " ",
+            Text = " ",
+            TypeParameter = " ",
+            Unit = " ",
+            Value = " ",
+            Variable = " ",
         }
         -- Returns the current column number.
         local column = function()
@@ -62,10 +62,9 @@ return {
             return col
         end
 
-
         -- luasnip custom function
         local in_snippet = function()
-            local session = require('luasnip.session')
+            local session = require("luasnip.session")
             local node = session.current_nodes[vim.api.nvim_get_current_buf()]
             if not node then
                 return false
@@ -81,14 +80,14 @@ return {
         -- returns true if the cursor is in leftmost column or at a whitespace char
         local in_whitespace = function()
             local col = column()
-            return col == 0 or vim.api.nvim_get_current_line():sub(col, col):match('%s')
+            return col == 0 or vim.api.nvim_get_current_line():sub(col, col):match("%s")
         end
 
         local in_leading_indent = function()
             local col = column()
             local line = vim.api.nvim_get_current_line()
             local prefix = line:sub(1, col)
-            return prefix:find('^%s*$')
+            return prefix:find("^%s*$")
         end
 
         -- custom shift width
@@ -105,53 +104,53 @@ return {
             local keys = nil
             if vim.o.expandtab then
                 if dedent then
-                    keys = rhs('<C-D>')
+                    keys = rhs("<C-D>")
                 else
-                    keys = rhs('<BS>')
+                    keys = rhs("<BS>")
                 end
             else
                 local col = column()
                 local line = vim.api.nvim_get_current_line()
                 local prefix = line:sub(1, col)
                 if in_leading_indent() then
-                    keys = rhs('<BS>')
+                    keys = rhs("<BS>")
                 else
                     local previous_char = prefix:sub(#prefix, #prefix)
-                    if previous_char ~= ' ' then
-                        keys = rhs('<BS>')
+                    if previous_char ~= " " then
+                        keys = rhs("<BS>")
                     else
-                        keys = rhs('<C-\\><C-o>:set expandtab<CR><BS><C-\\><C-o>:set noexpandtab<CR>')
+                        keys = rhs("<C-\\><C-o>:set expandtab<CR><BS><C-\\><C-o>:set noexpandtab<CR>")
                     end
                 end
             end
-            vim.api.nvim_feedkeys(keys, 'nt', true)
+            vim.api.nvim_feedkeys(keys, "nt", true)
         end
 
         -- custom smart tabs function
         local smart_tab = function(opts)
             local keys = nil
             if vim.o.expandtab then
-                keys = '<Tab>' -- Neovim will insert spaces.
+                keys = "<Tab>" -- Neovim will insert spaces.
             else
                 local col = column()
                 local line = vim.api.nvim_get_current_line()
                 local prefix = line:sub(1, col)
-                local in_leading_indent = prefix:find('^%s*$')
+                local in_leading_indent = prefix:find("^%s*$")
                 if in_leading_indent then
                     -- inserts a hard tab.
-                    keys = '<Tab>'
+                    keys = "<Tab>"
                 else
                     local sw = shift_width()
                     local previous_char = prefix:sub(#prefix, #prefix)
                     local previous_column = #prefix - #previous_char + 1
-                    local current_column = vim.fn.virtcol({ vim.fn.line('.'), previous_column }) + 1
+                    local current_column = vim.fn.virtcol({ vim.fn.line("."), previous_column }) + 1
                     local remainder = (current_column - 1) % sw
                     local move = remainder == 0 and sw or sw - remainder
-                    keys = (' '):rep(move)
+                    keys = (" "):rep(move)
                 end
             end
 
-            vim.api.nvim_feedkeys(rhs(keys), 'nt', true)
+            vim.api.nvim_feedkeys(rhs(keys), "nt", true)
         end
 
         local select_next_item = function(fallback)
@@ -177,17 +176,17 @@ return {
             local behavior = cmp.ConfirmBehavior.Replace
             if entry then
                 local completion_item = entry.completion_item
-                local newText = ''
+                local newText = ""
                 if completion_item.textEdit then
                     newText = completion_item.textEdit.newText
-                elseif type(completion_item.insertText) == 'string' and completion_item.insertText ~= '' then
+                elseif type(completion_item.insertText) == "string" and completion_item.insertText ~= "" then
                     newText = completion_item.insertText
                 else
-                    newText = completion_item.word or completion_item.label or ''
+                    newText = completion_item.word or completion_item.label or ""
                 end
 
                 -- checks how many characters will be different after the cursor position if we replace?
-                local diff_after = math.max(0, entry.replace_range['end'].character + 1) - entry.context.cursor.col
+                local diff_after = math.max(0, entry.replace_range["end"].character + 1) - entry.context.cursor.col
 
                 -- does the text that will be replaced after the cursor match the suffix
                 -- of the `newText` to be inserted ? if not, then `Insert` instead.
@@ -198,9 +197,9 @@ return {
             cmp.confirm({ select = true, behavior = behavior })
         end
 
-
         -- loads vscode style snippets from installed plugins (e.g. friendly-snippets)
         require("luasnip.loaders.from_vscode").lazy_load()
+        cmp.register_source("easy-dotnet", require("easy-dotnet").package_completion_source)
 
         cmp.setup({
             experimental = {
@@ -213,12 +212,11 @@ return {
             },
             window = {
                 documentation = {
-                    border = {'╭', '─', '╮', '│', '╯', '─', '╰', '│'},
+                    border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
                 },
                 completion = {
-                    border = {'┌', '─', '┐', '│', '┘', '─', '└', '│'},
-                }
-
+                    border = { "┌", "─", "┐", "│", "┘", "─", "└", "│" },
+                },
             },
             -- config nvim cmp to work with snippet engine
             snippet = {
@@ -230,7 +228,8 @@ return {
             sources = cmp.config.sources({
                 { name = "luasnip" }, -- snippets
                 { name = "lazydev" },
-                { name = "nvim_lsp"},
+                { name = "nvim_lsp" },
+                { name = "easy-dotnet" },
                 { name = "buffer" }, -- text within current buffer
                 { name = "path" }, -- file system paths
                 { name = "tailwindcss-colorizer-cmp" },
@@ -252,38 +251,38 @@ return {
                 -- end, { 'i', 's' }),
 
                 ["<C-e>"] = cmp.mapping.abort(), -- close completion window
-                ['<C-d>'] = cmp.mapping(function()
+                ["<C-d>"] = cmp.mapping(function()
                     cmp.close_docs()
-                end, { 'i', 's' }),
+                end, { "i", "s" }),
 
-                ['<C-f>'] = cmp.mapping.scroll_docs(4),
-                ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-                ['<C-j>'] = cmp.mapping(select_next_item),
-                ['<C-k>'] = cmp.mapping(select_prev_item),
-                ['<C-n>'] = cmp.mapping(select_next_item),
-                ['<C-p>'] = cmp.mapping(select_prev_item),
-                ['<Down>'] = cmp.mapping(select_next_item),
-                ['<Up>'] = cmp.mapping(select_prev_item),
+                ["<C-f>"] = cmp.mapping.scroll_docs(4),
+                ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+                ["<C-j>"] = cmp.mapping(select_next_item),
+                ["<C-k>"] = cmp.mapping(select_prev_item),
+                ["<C-n>"] = cmp.mapping(select_next_item),
+                ["<C-p>"] = cmp.mapping(select_prev_item),
+                ["<Down>"] = cmp.mapping(select_next_item),
+                ["<Up>"] = cmp.mapping(select_prev_item),
 
-                ['<C-y>'] = cmp.mapping(function(fallback)
+                ["<C-y>"] = cmp.mapping(function(fallback)
                     if cmp.visible() then
                         local entry = cmp.get_selected_entry()
                         confirm(entry)
                     else
                         fallback()
                     end
-                end, { 'i', 's' }),
+                end, { "i", "s" }),
 
-                ['<CR>'] = cmp.mapping(function(fallback)
+                ["<CR>"] = cmp.mapping(function(fallback)
                     if cmp.visible() then
                         local entry = cmp.get_selected_entry()
                         confirm(entry)
                     else
                         fallback()
                     end
-                end, { 'i', 's' }),
+                end, { "i", "s" }),
 
-                ['<S-Tab>'] = cmp.mapping(function(fallback)
+                ["<S-Tab>"] = cmp.mapping(function(fallback)
                     if cmp.visible() then
                         cmp.select_prev_item()
                     elseif has_luasnip and in_snippet() and luasnip.jumpable(-1) then
@@ -295,9 +294,9 @@ return {
                     else
                         fallback()
                     end
-                end, { 'i', 's' }),
+                end, { "i", "s" }),
 
-                ['<Tab>'] = cmp.mapping(function(_fallback)
+                ["<Tab>"] = cmp.mapping(function(_fallback)
                     if cmp.visible() then
                         -- if there is only one completion candidate then use it.
                         local entries = cmp.get_entries()
@@ -313,14 +312,13 @@ return {
                     else
                         cmp.complete()
                     end
-                end, { 'i', 's' }),
+                end, { "i", "s" }),
             }),
             -- setup lspkind for vscode pictograms in autocompletion dropdown menu
             formatting = {
                 format = function(entry, vim_item)
                     -- Add custom lsp_kinds icons
-                    vim_item.kind = string.format('%s %s', lsp_kinds[vim_item.kind] or '', vim_item.kind)
-
+                    vim_item.kind = string.format("%s %s", lsp_kinds[vim_item.kind] or "", vim_item.kind)
 
                     -- add menu tags (e.g., [Buffer], [LSP])
                     vim_item.menu = ({
@@ -356,17 +354,18 @@ return {
         -- Only show ghost text at word boundaries, not inside keywords. Based on idea
         -- from: https://github.com/hrsh7th/nvim-cmp/issues/2035#issuecomment-2347186210
 
-        local config = require('cmp.config')
+        local config = require("cmp.config")
         local toggle_ghost_text = function()
-            if vim.api.nvim_get_mode().mode ~= 'i' then
+            if vim.api.nvim_get_mode().mode ~= "i" then
                 return
             end
 
-            local cursor_column = vim.fn.col('.')
-            local current_line_contents = vim.fn.getline('.')
+            local cursor_column = vim.fn.col(".")
+            local current_line_contents = vim.fn.getline(".")
             local character_after_cursor = current_line_contents:sub(cursor_column, cursor_column)
 
-            local should_enable_ghost_text = character_after_cursor == '' or vim.fn.match(character_after_cursor, [[\k]]) == -1
+            local should_enable_ghost_text = character_after_cursor == ""
+                or vim.fn.match(character_after_cursor, [[\k]]) == -1
 
             local current = config.get().experimental.ghost_text
             if current ~= should_enable_ghost_text then
@@ -378,10 +377,9 @@ return {
             end
         end
 
-        vim.api.nvim_create_autocmd({ 'InsertEnter', 'CursorMovedI' }, {
+        vim.api.nvim_create_autocmd({ "InsertEnter", "CursorMovedI" }, {
             callback = toggle_ghost_text,
         })
-        -- ! Ghost text stuff ! -- 
-
+        -- ! Ghost text stuff ! --
     end,
 }

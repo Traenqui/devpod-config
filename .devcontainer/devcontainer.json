@@ -1,8 +1,15 @@
 {
-    "image": "mcr.microsoft.com/devcontainers/base:debian",
-    "features": {
-        "ghcr.io/meaningful-ooo/devcontainer-features/homebrew:2": {}
-    },
-   "name": "dotpod",
-   "forwardPorts": [40785]
+  "image": "mcr.microsoft.com/devcontainers/base:debian",
+  "features": {
+    "ghcr.io/meaningful-ooo/devcontainer-features/homebrew:2": {}
+  },
+  "name": "dotpod",
+  "mounts": [
+    "source=/run/current-system/sw/bin/xdg-open,target=/usr/bin/xdg-open,type=bind"
+  ],
+  "runArgs": ["-e", "DISPLAY", "-v", "/tmp/.X11-unix:/tmp/.X11-unix"],
+  "containerEnv": {
+    "DISPLAY": "${localEnv:DISPLAY}"
+  },
+  "forwardPorts": [38319]
 }

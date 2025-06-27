@@ -12,3 +12,6 @@ sudo -v
 info "Installing Brew packages"
 brew bundle
 success "Finished installing Brewfile packages."
+
+sudo apt-get install xdg-utils -y
+
